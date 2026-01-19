@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Card Game</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgb(0, 0, 30);
+            font-family: 'Times New Roman', Times, serif;
+            color: #adffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #header {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: rgb(0, 0, 50);
+            border-radius: .5rem;
+            padding: 10px;
+            font-size: 1.5rem;
+        }
+
+        #faizan {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            opacity: .5;
+            font-size: 12px;
+            animation: ani4 1s ease;
+        }
+        @keyframes ani4 {
+            0%{
+                bottom:10vh  ;
+                right: 45vw;
+            }
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #4affff;
+            border-radius: .5rem;
+            box-shadow: 0px 0px 10px #adffff;
+            height: 80vh;
+            width: 80vh;
+            overflow: hidden;
+            padding: 5px;
+            animation: ani1 .7s ease;
+        }
+
+        @keyframes ani1 {
+            0% {
+                opacity: 0;
+                border-radius: 50%;
+                transform: scaleY(.1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+
+        }
+
+        #box {
+            display: grid;
+            grid-template: repeat(6, 1fr)/repeat(6, 1fr);
+            gap: 5px;
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+        }
+
+        .emogiBox {
+            background-color: #3d9eff;
+            border-radius: .5rem;
+            font-size: 3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #adffff;
+            overflow: hidden;
+        }
+
+        .emogiBox span {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        @keyframes forcard {
+            0% {
+                opacity: 0;
+                transform: scale(.5);
+                border-radius: 100%;
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                border-radius: 0;
+            }
+        }
+
+        #scorebox {
+            position: absolute;
+            top: 0;
+            background: rgb(0, 0, 55);
+            border-radius: .5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 35vw;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px #4affff;
+            animation: ani3 .7s ease;
+        }
+
+        @keyframes ani3 {
+            0% {
+                opacity: 0;
+                transform: scaleX(.1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+
+        #clrbtn {
+            background-color: #007fff;
+            position: absolute;
+            top: 20px;
+            right: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: .5rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        #clrbtn:hover {
+            background-color: #0062c3;
+            transform: translateY(-2px);
+        }
+
+        #clrbtn:active {
+            transform: scale(.9);
+            box-shadow: 0 0 10px #adffff;
+        }
+
+        #clrbtn a {
+            text-decoration: none;
+        }
+
+        @media only screen and (max-width:700px) {
+
+            #container {
+                height: 60vh;
+                width: 60vh;
+            }
+
+            #scorebox {
+                top: 10vh;
+                width: 60vh;
+            }
+        }
+
+        @media only screen and (max-width:500px) {
+            #container {
+                height: 350px;
+                width: 350px;
+            }
+
+            .emogiBox {
+                font-size: 40px;
+            }
+
+            #scorebox {
+                top: 15vh;
+               max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">Memory Card Game</header>
+
+    <div id="scorebox">
+        <div id="score"></div>
+        <div id="highscore"></div>
+    </div>
+    <div id="container">
+        <div id="box"></div>
+    </div>
+
+    <button class="btnRestart" id="clrbtn" onclick="">Restart</button>
+    <div id="faizan">Faizan</div>
+
+    <script>
+        const emogies = ["❤️", "🌋", "🐣", "🧞", "🦚", "🐉", "🐢", "🦣", "🦈", "👻", "🦋", "🦑", "🦞", "🕊️", "🦢", "🪳", "🦅", "🐊", "🐩", "🦬", "🦌", "🐎", "🐫", "🐐", "🧜🏻‍♀️", "🎃", "🖼️", "🥇", "🗡️", "🏹", "⚔️", "🗿", "💵", "🍔", "🍕", "🍖", "🎂", "☕", "🍉", "🌹", "💐", "🌻", "🏵️", "✈️", "🛸", "🌟", "🌍", "🌌", "🕌", "🌝", "⛄", "🌈", "🌠", "🦕", "🦖", "🐬", "🦩", "🦉", "🐧", "🦜", "🫀", "🧚🏻", "🧚🏻‍♀️", "🎄", "🎁", "👑", "⚽", "🎳", "🎱", "🪁", "🎯", "🏸", "🎲", "🪆", "🪓", "🛖", "🧬", "🩸", "💣", "🔪", "🍿", "🥞", "🥯", "🥐", "🥚", "🥖", "🧈", "🧀", "🥪", "🌮", "🍠", "🍱", "🍘", "🍙", "🍛", "🍜", "🍣", "🥮", "🥧", "🍦", "🍧", "🍨", "🍩", "🍪", "🎂", "🍰", "🧁", "🍫", "🍯", "🍮", "🥛", "🧋", "🥥", "🥝", "🍇", "🍈", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍐", "🍑", "🍒", "🍓", "🌶️", "🌽", "🥕", "🥜", "🌸", "🌻", "🍁", "🍂", "🍃", "🌲", "🏍️", "🚀", "🏴‍☠️", "🗼", "🗽", "🌕", "☀️", "☄️", "🔥", "💧", "🖤", "💔", "❤️‍🔥", "💗", "🤍", "☪️", "💮", "🕧"]
+
+        const box = document.getElementById("box")
+        let scoreval = 0
+
+        let emogi = []
+        let card1 = []
+        let card2 = []
+        let arrfinal = []
+
+        let ranForemogi = () => Math.floor(Math.random() * emogies.length)
+
+        function emofunc() {
+            let ran;
+            for (let i = 0; i < 25; i++) {
+                ran = ranForemogi()
+                emogi.push(emogies[ran])
+            }
+            let newarr = new Set(emogi)
+            emogi = []
+            for (let val of newarr) {
+                if (emogi.length >= 18) { return }
+                emogi.push(val)
+            }
+            if (emogi.length < 18) return emofunc()
+            if (emogi.length > 18) return
+        }
+
+        function forBox() {
+            for (let i = 0; i < 36; i++) {
+                box.insertAdjacentHTML("beforeend",
+                    `<div id="emogiBox${i}" class="emogiBox"  ></div>`
+                )
+            }
+        }
+
+        let score = () => document.getElementById("score").innerHTML = `Score : ${scoreval}`
+
+        function clickedBox({ target: clicked }) {
+            scoreval++
+            score()
+            if (card1.length >= 2 || card2.length >= 2 || clicked.id === "") return
+            let a = clicked
+            clicked.style.animation = `forcard .5s ease `;
+            clicked.style.opacity = 1;
+            clicked.style.background = "#adffff8a";
+
+            card1.push(clicked.innerHTML)
+            card2.push(clicked.id)
+
+            if (card1.length >= 2 && card1[0] != card1[1]) {
+                document.getElementById(card2[0]).style.background = "#ff5757";
+                document.getElementById(card2[1]).style.background = "#ff5757";
+                setTimeout(() => {
+                    document.getElementById(card2[0]).style = "";
+                    document.getElementById(card2[1]).style = "";
+                    card1 = []
+                    card2 = []
+                }, 1100);
+            }
+            if (card2[0] === card2[1]) {
+                card1 = [card1[0]]
+                card2 = [card2[0]]
+                return
+            }
+            if (card1.length >= 2 && card1[0] === card1[1]) {
+                arrfinal.push(card1)
+                let a = document.getElementById(card2[0])
+                let b = document.getElementById(card2[1])
+                a.style.background = "#8cff8c";
+                b.style.background = "#8cff8c";
+                a.setAttribute("id", "")
+                b.setAttribute("id", "")
+                card1 = []
+                card2 = []
+            }
+            if (arrfinal.length === 18) {
+                if (scoreval < highscore) saveBestVal()
+            }
+        }
+
+        function putEmogies() {
+            emogi.forEach((valu, index) => {
+                emogibox(valu, index)
+            })
+        }
+
+        function emogibox(emo, index) {
+            let ran = randomVal();
+            let a = document.getElementById(`emogiBox${ran}`)
+            if (a.hasChildNodes('span')) {
+                emogibox(emo, index)
+            }
+            else {
+                a.insertAdjacentHTML("beforeend",
+                    `<span class="emo emo${index}" id="emo${ran}">${emo}</span>`)
+                return;
+            }
+        }
+
+        let randomVal = () => Math.floor(Math.random() * 36)
+
+
+
+        let highscore = localStorage.getItem("merorycardgameHighscore") || 200;
+
+        document.getElementById("highscore").innerHTML = ` Best Score : ${highscore}`
+
+        let saveBestVal = () => localStorage.setItem("merorycardgameHighscore", scoreval)
+
+
+        document.getElementById("clrbtn").addEventListener("click", () => {
+            window.location.reload();
+        })
+
+        window.onload = function () {
+
+            emofunc()
+            forBox();
+            score()
+            putEmogies()
+            putEmogies()
+            const emogibox = document.querySelectorAll(".emo").forEach((box) => {
+                box.addEventListener("click", clickedBox)
+            })
+        }
+    </script>
+</body>
+
+</html>
